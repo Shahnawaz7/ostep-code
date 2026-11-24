@@ -1,30 +1,5 @@
 
--- A) STG tables (except stg_sol_sales_order) -> d365_tst.external_staging
-SELECT concat('CREATE TABLE d365_tst.external_staging.', table_name,
-              ' LIKE cap_edw_tst.sodm_silver.', table_name, ';\n',
-              'ALTER TABLE d365_tst.external_staging.', table_name,
-              ' OWNER TO `Administrators`;') AS ddl
-FROM cap_edw_tst.information_schema.tables
-WHERE table_schema = 'sodm_silver' AND table_name <> 'stg_sol_sales_order'
-UNION ALL
--- B) all gold tables -> sodm_silver
-SELECT concat('CREATE TABLE cap_edw_tst.sodm_silver.', table_name,
-              ' LIKE cap_edw_tst.sodm_gold.', table_name, ';\n',
-              'ALTER TABLE cap_edw_tst.sodm_silver.', table_name,
-              ' OWNER TO `Administrators`;')
-FROM cap_edw_tst.information_schema.tables
-WHERE table_schema = 'sodm_gold';
-
-SHOW TABLES IN d365_tst.external_staging;   -- expect 11
-SHOW TABLES IN cap_edw_tst.sodm_silver;     -- expect 1 + 25 = 26
-
-SELECT concat('DROP TABLE cap_edw_tst.sodm_silver.', table_name, ';') AS ddl
-FROM cap_edw_tst.information_schema.tables
-WHERE table_schema = 'sodm_silver' AND table_name LIKE 'stg%' AND table_name <> 'stg_sol_sales_order'
-UNION ALL
-SELECT concat('DROP TABLE cap_edw_tst.sodm_gold.', table_name, ';')
-FROM cap_edw_tst.information_schema.tables
-WHERE table_schema = 'sodm_gold';
+-- A) 
 # ostep-code
 Code from various chapters in OSTEP (http://www.ostep.org)
 
