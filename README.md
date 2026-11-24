@@ -1,3 +1,6 @@
+select schemaname, tablename, "column", "type", distkey, sortkey, "notnull" from pg_table_def where schemaname in ('bisol','bicom') and (sortkey <> 0 or "notnull" = true or distkey = true) order by schemaname, tablename, abs(sortkey);
+
+
 # ostep-code
 Code from various chapters in OSTEP (http://www.ostep.org)
 
